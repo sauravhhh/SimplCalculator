@@ -3,602 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Calculator</title>
+    <title>Professional Calculator</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background-color: #f5f5f7;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
         .calculator {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             width: 100%;
-            position: relative;
+            max-width: 380px;
             overflow: hidden;
-        }
-
-        .calculator::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            pointer-events: none;
-        }
-
-        .mode-selector {
-            display: flex;
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 5px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: none;
-            border-radius: 10px;
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .mode-btn.active {
-            color: white;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
         .display {
-            background: #1a1a1a;
-            color: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            font-size: 2em;
+            background-color: #ffffff;
+            padding: 30px 20px;
+            text-align: right;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .display-previous {
+            color: #8e8e93;
+            font-size: 18px;
+            min-height: 24px;
+            margin-bottom: 5px;
+        }
+
+        .display-current {
+            color: #1c1c1e;
+            font-size: 42px;
             font-weight: 300;
-            word-break: break-all;
-            position: relative;
             overflow: hidden;
-        }
-
-        .display.countdown-mode {
-            flex-direction: column;
-            justify-content: center;
-            font-size: 1.5em;
-            text-align: center;
-        }
-
-        .countdown-display {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            width: 100%;
-        }
-
-        .time-unit {
-            text-align: center;
-        }
-
-        .time-number {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .time-label {
-            font-size: 0.7em;
-            color: #aaa;
-            margin-top: 5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            gap: 1px;
+            background-color: #f0f0f0;
+            padding: 1px;
         }
 
-        .btn {
+        button {
+            background-color: #ffffff;
             border: none;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
+            font-size: 22px;
+            padding: 28px 0;
             cursor: pointer;
-            transition: all 0.3s ease;
-            height: 60px;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            color: #1c1c1e;
+            font-weight: 400;
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
+        button:hover {
+            background-color: #f9f9f9;
         }
 
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
+        button:active {
+            transform: scale(0.95);
         }
 
-        .btn-number {
-            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-            color: #333;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .operator {
+            color: #007aff;
+            font-weight: 500;
         }
 
-        .btn-number:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-operator {
-            background: linear-gradient(145deg, #667eea, #5a6fd8);
+        .equals {
+            background-color: #007aff;
             color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            border-radius: 0 0 24px 0;
         }
 
-        .btn-operator:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        .equals:hover {
+            background-color: #0062cc;
         }
 
-        .btn-special {
-            background: linear-gradient(145deg, #764ba2, #6a4190);
-            color: white;
-            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
-        }
-
-        .btn-special:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
-        }
-
-        .btn-wide {
+        .zero {
+            border-radius: 0 0 0 24px;
             grid-column: span 2;
+            text-align: left;
+            padding-left: 40px;
         }
 
-        .date-inputs {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        .clear {
+            color: #ff3b30;
+            font-weight: 500;
         }
 
-        .date-inputs.active {
-            display: grid;
+        .function {
+            color: #8e8e93;
+            font-weight: 500;
         }
 
-        .date-input-group {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .date-input-label {
-            font-size: 0.8em;
-            color: #666;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .date-input {
-            width: 100%;
-            border: none;
-            background: white;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            text-align: center;
-        }
-
-        .countdown-inputs {
-            display: none;
-            margin-bottom: 15px;
-        }
-
-        .countdown-inputs.active {
-            display: block;
-        }
-
-        .countdown-input-group {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .countdown-input-label {
-            font-size: 0.8em;
-            color: #666;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .datetime-input {
-            width: 100%;
-            border: none;
-            background: white;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 0.9em;
-        }
-
-        .result-text {
-            font-size: 0.9em;
-            text-align: center;
-            padding: 10px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        @media (max-width: 480px) {
+        @media (max-width: 380px) {
             .calculator {
-                padding: 20px;
-                margin: 10px;
+                max-width: 100%;
             }
             
-            .btn {
-                height: 50px;
-                font-size: 1em;
+            .display-current {
+                font-size: 36px;
             }
             
-            .display {
-                font-size: 1.5em;
-                padding: 15px;
+            button {
+                padding: 24px 0;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .display-current {
+                font-size: 32px;
+            }
+            
+            button {
+                padding: 20px 0;
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <div class="mode-selector">
-            <button class="mode-btn active" data-mode="calculator">Calculator</button>
-            <button class="mode-btn" data-mode="countdown">Countdown</button>
-            <button class="mode-btn" data-mode="date">Date Calc</button>
+        <div class="display">
+            <div class="display-previous" id="previous-operand"></div>
+            <div class="display-current" id="current-operand">0</div>
         </div>
-
-        <div class="display" id="display">0</div>
-
-        <!-- Date Calculator Inputs -->
-        <div class="date-inputs" id="dateInputs">
-            <div class="date-input-group">
-                <div class="date-input-label">From Date</div>
-                <input type="date" class="date-input" id="fromDate">
-            </div>
-            <div class="date-input-group">
-                <div class="date-input-label">To Date</div>
-                <input type="date" class="date-input" id="toDate">
-            </div>
-        </div>
-
-        <!-- Countdown Inputs -->
-        <div class="countdown-inputs" id="countdownInputs">
-            <div class="countdown-input-group">
-                <div class="countdown-input-label">Target Date & Time</div>
-                <input type="datetime-local" class="datetime-input" id="targetDateTime">
-            </div>
-        </div>
-
-        <div class="result-text" id="resultText" style="display: none;"></div>
-
-        <div class="buttons" id="buttons">
-            <!-- Calculator Mode Buttons -->
-            <button class="btn btn-special" onclick="clearAll()">AC</button>
-            <button class="btn btn-special" onclick="clearEntry()">CE</button>
-            <button class="btn btn-special" onclick="deleteLast()">⌫</button>
-            <button class="btn btn-operator" onclick="inputOperator('/')">÷</button>
+        <div class="buttons">
+            <button class="clear" id="clear-btn">AC</button>
+            <button class="function" id="plus-minus">+/-</button>
+            <button class="function" id="percent">%</button>
+            <button class="operator" id="divide">÷</button>
             
-            <button class="btn btn-number" onclick="inputNumber('7')">7</button>
-            <button class="btn btn-number" onclick="inputNumber('8')">8</button>
-            <button class="btn btn-number" onclick="inputNumber('9')">9</button>
-            <button class="btn btn-operator" onclick="inputOperator('*')">×</button>
+            <button class="number" id="seven">7</button>
+            <button class="number" id="eight">8</button>
+            <button class="number" id="nine">9</button>
+            <button class="operator" id="multiply">×</button>
             
-            <button class="btn btn-number" onclick="inputNumber('4')">4</button>
-            <button class="btn btn-number" onclick="inputNumber('5')">5</button>
-            <button class="btn btn-number" onclick="inputNumber('6')">6</button>
-            <button class="btn btn-operator" onclick="inputOperator('-')">−</button>
+            <button class="number" id="four">4</button>
+            <button class="number" id="five">5</button>
+            <button class="number" id="six">6</button>
+            <button class="operator" id="subtract">−</button>
             
-            <button class="btn btn-number" onclick="inputNumber('1')">1</button>
-            <button class="btn btn-number" onclick="inputNumber('2')">2</button>
-            <button class="btn btn-number" onclick="inputNumber('3')">3</button>
-            <button class="btn btn-operator" onclick="inputOperator('+')">+</button>
+            <button class="number" id="one">1</button>
+            <button class="number" id="two">2</button>
+            <button class="number" id="three">3</button>
+            <button class="operator" id="add">+</button>
             
-            <button class="btn btn-number btn-wide" onclick="inputNumber('0')">0</button>
-            <button class="btn btn-number" onclick="inputNumber('.')">.</button>
-            <button class="btn btn-special" onclick="calculate()">=</button>
+            <button class="number zero" id="zero">0</button>
+            <button class="number" id="decimal">.</button>
+            <button class="equals" id="equals">=</button>
         </div>
     </div>
 
     <script>
-        let currentMode = 'calculator';
-        let currentInput = '0';
-        let previousInput = '';
-        let operator = '';
-        let shouldResetDisplay = false;
-        let countdownInterval = null;
+        const previousOperandTextElement = document.getElementById('previous-operand');
+        const currentOperandTextElement = document.getElementById('current-operand');
+        
+        let currentOperand = '0';
+        let previousOperand = '';
+        let operation = undefined;
+        let shouldResetScreen = false;
 
-        const display = document.getElementById('display');
-        const buttons = document.getElementById('buttons');
-        const dateInputs = document.getElementById('dateInputs');
-        const countdownInputs = document.getElementById('countdownInputs');
-        const resultText = document.getElementById('resultText');
-        const fromDate = document.getElementById('fromDate');
-        const toDate = document.getElementById('toDate');
-        const targetDateTime = document.getElementById('targetDateTime');
-
-        // Mode switching
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentMode = btn.dataset.mode;
-                switchMode();
-            });
-        });
-
-        function switchMode() {
-            clearInterval(countdownInterval);
-            resultText.style.display = 'none';
-            
-            if (currentMode === 'calculator') {
-                display.className = 'display';
-                display.innerHTML = currentInput;
-                buttons.style.display = 'grid';
-                dateInputs.classList.remove('active');
-                countdownInputs.classList.remove('active');
-            } else if (currentMode === 'date') {
-                display.className = 'display';
-                display.innerHTML = 'Select Dates';
-                buttons.style.display = 'none';
-                dateInputs.classList.add('active');
-                countdownInputs.classList.remove('active');
-                setupDateCalculation();
-            } else if (currentMode === 'countdown') {
-                display.className = 'display countdown-mode';
-                buttons.style.display = 'none';
-                dateInputs.classList.remove('active');
-                countdownInputs.classList.add('active');
-                setupCountdown();
+        function updateDisplay() {
+            currentOperandTextElement.innerText = currentOperand;
+            if (operation != null) {
+                previousOperandTextElement.innerText = `${previousOperand} ${getOperationSymbol(operation)}`;
+            } else {
+                previousOperandTextElement.innerText = '';
             }
         }
 
-        // Calculator Functions
-        function inputNumber(num) {
-            if (currentMode !== 'calculator') return;
-            
-            if (shouldResetDisplay) {
-                currentInput = '';
-                shouldResetDisplay = false;
+        function getOperationSymbol(operation) {
+            switch (operation) {
+                case 'add':
+                    return '+';
+                case 'subtract':
+                    return '−';
+                case 'multiply':
+                    return '×';
+                case 'divide':
+                    return '÷';
+                default:
+                    return '';
             }
-            
-            if (currentInput === '0') {
-                currentInput = num;
-            } else {
-                currentInput += num;
-            }
-            
+        }
+
+        function clear() {
+            currentOperand = '0';
+            previousOperand = '';
+            operation = undefined;
             updateDisplay();
         }
 
-        function inputOperator(op) {
-            if (currentMode !== 'calculator') return;
-            
-            if (previousInput !== '' && currentInput !== '' && operator !== '') {
-                calculate();
+        function appendNumber(number) {
+            if (shouldResetScreen) {
+                currentOperand = '';
+                shouldResetScreen = false;
             }
             
-            previousInput = currentInput;
-            operator = op;
-            shouldResetDisplay = true;
+            if (number === '.' && currentOperand.includes('.')) return;
+            if (currentOperand === '0' && number !== '.') {
+                currentOperand = number;
+            } else {
+                currentOperand += number;
+            }
+            updateDisplay();
         }
 
-        function calculate() {
-            if (currentMode !== 'calculator') return;
+        function chooseOperation(op) {
+            if (currentOperand === '') return;
+            if (previousOperand !== '') {
+                compute();
+            }
+            operation = op;
+            previousOperand = currentOperand;
+            currentOperand = '0';
+            updateDisplay();
+        }
+
+        function compute() {
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) return;
             
-            if (previousInput === '' || currentInput === '' || operator === '') return;
-            
-            let result;
-            const prev = parseFloat(previousInput);
-            const current = parseFloat(currentInput);
-            
-            switch (operator) {
-                case '+':
-                    result = prev + current;
+            switch (operation) {
+                case 'add':
+                    computation = prev + current;
                     break;
-                case '-':
-                    result = prev - current;
+                case 'subtract':
+                    computation = prev - current;
                     break;
-                case '*':
-                    result = prev * current;
+                case 'multiply':
+                    computation = prev * current;
                     break;
-                case '/':
+                case 'divide':
                     if (current === 0) {
-                        currentInput = 'Error';
+                        currentOperand = 'Error';
                         updateDisplay();
                         return;
                     }
-                    result = prev / current;
+                    computation = prev / current;
                     break;
                 default:
                     return;
             }
             
-            currentInput = result.toString();
-            previousInput = '';
-            operator = '';
-            shouldResetDisplay = true;
+            currentOperand = parseFloat(computation.toFixed(10)).toString();
+            operation = undefined;
+            previousOperand = '';
+            shouldResetScreen = true;
             updateDisplay();
         }
 
-        function clearAll() {
-            if (currentMode !== 'calculator') return;
-            
-            currentInput = '0';
-            previousInput = '';
-            operator = '';
-            shouldResetDisplay = false;
-            updateDisplay();
-        }
-
-        function clearEntry() {
-            if (currentMode !== 'calculator') return;
-            
-            currentInput = '0';
-            updateDisplay();
-        }
-
-        function deleteLast() {
-            if (currentMode !== 'calculator') return;
-            
-            if (currentInput.length > 1) {
-                currentInput = currentInput.slice(0, -1);
+        function toggleSign() {
+            if (currentOperand === '0') return;
+            if (currentOperand.startsWith('-')) {
+                currentOperand = currentOperand.slice(1);
             } else {
-                currentInput = '0';
+                currentOperand = '-' + currentOperand;
             }
             updateDisplay();
         }
 
-        function updateDisplay() {
-            display.textContent = currentInput;
+        function percentage() {
+            currentOperand = (parseFloat(currentOperand) / 100).toString();
+            shouldResetScreen = true;
+            updateDisplay();
         }
 
-        // Date Calculator
-        function setupDateCalculation() {
-            const today = new Date().toISOString().split('T')[0];
-            fromDate.value = today;
-            toDate.value = today;
-            
-            fromDate.addEventListener('change', calculateDateDifference);
-            toDate.addEventListener('change', calculateDateDifference);
-        }
+        // Event listeners
+        document.getElementById('clear-btn').addEventListener('click', clear);
+        document.getElementById('plus-minus').addEventListener('click', toggleSign);
+        document.getElementById('percent').addEventListener('click', percentage);
+        document.getElementById('divide').addEventListener('click', () => chooseOperation('divide'));
+        document.getElementById('multiply').addEventListener('click', () => chooseOperation('multiply'));
+        document.getElementById('subtract').addEventListener('click', () => chooseOperation('subtract'));
+        document.getElementById('add').addEventListener('click', () => chooseOperation('add'));
+        document.getElementById('equals').addEventListener('click', compute);
+        
+        // Number buttons
+        document.getElementById('zero').addEventListener('click', () => appendNumber('0'));
+        document.getElementById('one').addEventListener('click', () => appendNumber('1'));
+        document.getElementById('two').addEventListener('click', () => appendNumber('2'));
+        document.getElementById('three').addEventListener('click', () => appendNumber('3'));
+        document.getElementById('four').addEventListener('click', () => appendNumber('4'));
+        document.getElementById('five').addEventListener('click', () => appendNumber('5'));
+        document.getElementById('six').addEventListener('click', () => appendNumber('6'));
+        document.getElementById('seven').addEventListener('click', () => appendNumber('7'));
+        document.getElementById('eight').addEventListener('click', () => appendNumber('8'));
+        document.getElementById('nine').addEventListener('click', () => appendNumber('9'));
+        document.getElementById('decimal').addEventListener('click', () => appendNumber('.'));
 
-        function calculateDateDifference() {
-            const from = new Date(fromDate.value);
-            const to = new Date(toDate.value);
-            
-            if (!fromDate.value || !toDate.value) return;
-            
-            const diffTime = Math.abs(to - from);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            const diffWeeks = Math.floor(diffDays / 7);
-            const diffMonths = Math.abs(to.getMonth() - from.getMonth() + (12 * (to.getFullYear() - from.getFullYear())));
-            const diffYears = Math.abs(to.getFullYear() - from.getFullYear());
-            
-            let resultHTML = `
-                <strong>${diffDays}</strong> days<br>
-                <strong>${diffWeeks}</strong> weeks<br>
-                <strong>${diffMonths}</strong> months<br>
-                <strong>${diffYears}</strong> years
-            `;
-            
-            if (to > from) {
-                resultHTML += `<br><small>From ${fromDate.value} to ${toDate.value}</small>`;
-            } else {
-                resultHTML += `<br><small>From ${toDate.value} to ${fromDate.value}</small>`;
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            if (event.key >= '0' && event.key <= '9') {
+                appendNumber(event.key);
+            } else if (event.key === '.') {
+                appendNumber('.');
+            } else if (event.key === '+') {
+                chooseOperation('add');
+            } else if (event.key === '-') {
+                chooseOperation('subtract');
+            } else if (event.key === '*') {
+                chooseOperation('multiply');
+            } else if (event.key === '/') {
+                chooseOperation('divide');
+            } else if (event.key === 'Enter' || event.key === '=') {
+                compute();
+            } else if (event.key === 'Escape' || event.key === 'c' || event.key === 'C') {
+                clear();
+            } else if (event.key === '%') {
+                percentage();
             }
-            
-            display.innerHTML = resultHTML;
-            resultText.style.display = 'block';
-            resultText.innerHTML = `Total difference: <strong>${diffDays} days</strong>`;
-        }
-
-        // Countdown Timer
-        function setupCountdown() {
-            const now = new Date();
-            now.setHours(now.getHours() + 1); // Default to 1 hour from now
-            targetDateTime.value = now.toISOString().slice(0, 16);
-            
-            targetDateTime.addEventListener('change', startCountdown);
-            startCountdown();
-        }
-
-        function startCountdown() {
-            clearInterval(countdownInterval);
-            
-            if (!targetDateTime.value) return;
-            
-            const target = new Date(targetDateTime.value);
-            
-            countdownInterval = setInterval(() => {
-                const now = new Date();
-                const diff = target - now;
-                
-                if (diff <= 0) {
-                    clearInterval(countdownInterval);
-                    display.innerHTML = '<div style="font-size: 1.5em; color: #667eea;">🎉 Time\'s Up! 🎉</div>';
-                    return;
-                }
-                
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
-                display.innerHTML = `
-                    <div class="countdown-display">
-                        <div class="time-unit">
-                            <div class="time-number">${days}</div>
-                            <div class="time-label">DAYS</div>
-                        </div>
-                        <div class="time-unit">
-                            <div class="time-number">${hours}</div>
-                            <div class="time-label">HOURS</div>
-                        </div>
-                        <div class="time-unit">
-                            <div class="time-number">${minutes}</div>
-                            <div class="time-label">MINS</div>
-                        </div>
-                        <div class="time-unit">
-                            <div class="time-number">${seconds}</div>
-                            <div class="time-label">SECS</div>
-                        </div>
-                    </div>
-                `;
-            }, 1000);
-        }
-
-        // Initialize
-        switchMode();
+        });
     </script>
 </body>
-</html>
+                                                  </html>
