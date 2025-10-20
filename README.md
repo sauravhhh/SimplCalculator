@@ -1,12 +1,9 @@
 # 🧮 Smart Calculator  
 
-A versatile calculator app that combines standard calculations, countdown timers, and date difference calculations.  
-All-in-one mathematical tool with a clean, mobile-friendly interface! ⚡  
+A versatile calculator app that do simple calculations, All-in-one mathematical tool with a clean, mobile-friendly interface! ⚡  
 
 ## Features  
-- **Standard Calculator**: Basic arithmetic operations (+, -, ×, ÷)  
-- **Countdown Timer**: Set custom countdowns with real-time updates  
-- **Date Difference Calculator**: Calculate days, months, years between dates  
+- **Standard Calculator**: Basic arithmetic operations (+, -, ×, ÷)
 - **Mobile-friendly design** optimized for touch interactions 📱  
 - **Responsive layout** works on all screen sizes  
 - **Clean interface** with intuitive button layouts  
@@ -16,8 +13,7 @@ All-in-one mathematical tool with a clean, mobile-friendly interface! ⚡
 ## Tech Stack  
 - **HTML5**  
 - **CSS3 (Mobile-first responsive design)**  
-- **Vanilla JavaScript (Calculation logic + Timer functions)**  
-- **Date API** (for date calculations)  
+- **Vanilla JavaScript (Calculation logic)**  
 
 ---
 
@@ -26,8 +22,6 @@ All-in-one mathematical tool with a clean, mobile-friendly interface! ⚡
 | Mode | Description | Features |
 |------|-------------|----------|
 | **Standard Calculator** | Basic arithmetic operations | Addition, Subtraction, Multiplication, Division, Clear, Decimal support |
-| **Countdown Timer** | Time countdown functionality | Set hours/minutes/seconds, Start/Pause/Reset, Real-time display |
-| **Date Difference** | Calculate time between dates | Date picker inputs, Days/Months/Years output, Age calculator |
 
 ---
 
